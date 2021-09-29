@@ -11,6 +11,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import io.cucumber.gherkin.ParserException.UnexpectedTokenException;
+
 public class App 
 {
     public static void main( String[] args )
@@ -19,7 +21,7 @@ public class App
         System.setProperty("webdriver.chrome.driver","C:\\Users\\Owner\\Desktop\\HOME\\Home\\PROYECTOS\\"
         		+ "selenium\\WebDrivers\\chromedriver_win32\\chromedriver.exe");
       	WebDriver driver = new ChromeDriver();
-      	/*String baseUrl = "http://demo.guru99.com/test/newtours/";
+      	String baseUrl = "http://demo.guru99.com/test/newtours/";
         String expectedTitle = "Welcome: Mercury Tours";
         String actualTitle = "";
         driver.get(baseUrl);
@@ -30,6 +32,8 @@ public class App
         	System.out.println( "Test Failed!" );
         }
         //---------------------------------------------------------------
+        //Wait VAR
+        WebDriverWait myWaitVar = new WebDriverWait(driver, 3);
         baseUrl = "http://www.facebook.com";
         String tagName = "";
         driver.get(baseUrl);
@@ -86,16 +90,19 @@ public class App
         }
         //Switch to Frame Example
         driver.get("http://demo.guru99.com/selenium/deprecated.html");
-        driver.switchTo().frame("classFrame");
+        myWaitVar.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt("classFrame"));
+        //driver.switchTo().frame("classFrame");
         driver.findElement(By.linkText("Deprecated")).click();
         //Pop out Alert Example
+        //Wait example
         driver.get("http://jsbin.com/usidix/1");
         driver.findElement(By.cssSelector("input[value=\"Go!\"]")).click();
+        if (myWaitVar.until(ExpectedConditions.alertIsPresent()) != null) {
+        	System.out.println("Alert is now present");
+        }
         String alertMessage = driver.switchTo().alert().getText();
         driver.switchTo().alert().accept();
-        System.out.println(alertMessage);*/
-        //Wait example
-        WebDriverWait myWaitVar = new WebDriverWait(driver, 1);
+        System.out.println(alertMessage);
         driver.navigate().to("http://the-internet.herokuapp.com/hovers");
         List<WebElement> images = new ArrayList<WebElement>();
         images = driver.findElements(By.tagName("img"));
@@ -109,6 +116,9 @@ public class App
         		try {
         			String href = "/users/" + i;
                 	myWaitVar.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='" + href + "']")));
+                	if (myWaitVar.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@href='" + href + "']"))) != null) {
+                		System.out.println("Profile " + i + " visible and now clickable");
+                	}
                 	System.out.println("Enabled " + images.get(i).isEnabled());
                 	System.out.println("Displayed " + images.get(i).isDisplayed());
                 	System.out.println("Selected " + images.get(i).isSelected());
@@ -120,7 +130,28 @@ public class App
         		System.out.println(i + " Not what we are looking for, " +  images.get(i).getAttribute("alt"));
         	}
         }
+        driver.get("https://demoqa.com/slider/");
+        System.out.println("demoqa webpage Displayed");
+        
+    	//Maximize browser window
+        driver.manage().window().maximize();
+        //Instantiate Action Class        
+        Actions actions = new Actions(driver);
+        //Retrieve WebElemnt 'slider' to perform mouse hover 
+    	WebElement slider = driver.findElement(By.xpath("//input[@class='range-slider range-slider--primary']"));
+    	//Move mouse to x offset 50 i.e. in horizontal direction
+    	actions.moveToElement(slider, 50, 50).perform();
+    	slider.click();
+    	System.out.println("Moved slider in horizontal directions");
         driver.quit();
+        System.exit(0);
+        /*
+         	WebDriver provides these useful navigation commands
+			navigate().forward()
+			navigate().back()
+			navigate().to()
+			navigate().refresh()
+        */
     }
     
     public void switchTab(WebDriver driver) {
