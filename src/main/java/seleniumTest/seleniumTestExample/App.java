@@ -80,10 +80,23 @@ public class App
         selectElement.selectByValue("java");
         driver.findElement(By.id("submit")).click();
         app.switchTab(driver);
-        //7. By.partialLinkText	locates elements that contain the given link text	findElement(By.partialLinkText(“REG”)) 
-        driver.findElement(By.partialLinkText("Back to Previous")).click();
+        //7. By.partialLinkText	locates elements that contain the given link text	findElement(By.partialLinkText(“REG”))
+        try {
+        	driver.findElement(By.partialLinkText("Back to Previous")).click();
+        } catch (Exception e) {
+        	System.out.println("Already subscribed!");
+        }
+        //Switch to Frame Example
+        driver.get("http://demo.guru99.com/selenium/deprecated.html");
+        driver.switchTo().frame("classFrame");
+        driver.findElement(By.linkText("Deprecated")).click();
+        //Pop out Alert Example
+        driver.get("http://jsbin.com/usidix/1");
+        driver.findElement(By.cssSelector("input[value=\"Go!\"]")).click();
+        String alertMessage = driver.switchTo().alert().getText();
+        driver.switchTo().alert().accept();
+        System.out.println(alertMessage);
         //driver.close();
-        //System.exit(0);
     }
     
     public void switchTab(WebDriver driver) {
