@@ -1,17 +1,15 @@
 package seleniumTest.seleniumTestExample;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import javax.swing.text.html.HTMLDocument.Iterator;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class App 
 {
@@ -21,7 +19,7 @@ public class App
         System.setProperty("webdriver.chrome.driver","C:\\Users\\Owner\\Desktop\\HOME\\Home\\PROYECTOS\\"
         		+ "selenium\\WebDrivers\\chromedriver_win32\\chromedriver.exe");
       	WebDriver driver = new ChromeDriver();
-      	String baseUrl = "http://demo.guru99.com/test/newtours/";
+      	/*String baseUrl = "http://demo.guru99.com/test/newtours/";
         String expectedTitle = "Welcome: Mercury Tours";
         String actualTitle = "";
         driver.get(baseUrl);
@@ -95,8 +93,34 @@ public class App
         driver.findElement(By.cssSelector("input[value=\"Go!\"]")).click();
         String alertMessage = driver.switchTo().alert().getText();
         driver.switchTo().alert().accept();
-        System.out.println(alertMessage);
-        //driver.close();
+        System.out.println(alertMessage);*/
+        //Wait example
+        WebDriverWait myWaitVar = new WebDriverWait(driver, 1);
+        driver.navigate().to("http://the-internet.herokuapp.com/hovers");
+        List<WebElement> images = new ArrayList<WebElement>();
+        images = driver.findElements(By.tagName("img"));
+        Actions hoverAction = new Actions(driver);
+        for (int i = 0;i < images.size();i++) {
+        	System.out.println("Enabled " + images.get(i).isEnabled());
+        	System.out.println("Displayed " + images.get(i).isDisplayed());
+        	System.out.println("Selected " + images.get(i).isSelected());
+        	hoverAction.moveToElement(images.get(i)).perform();
+        	if (images.get(i).getAttribute("alt").contentEquals("User Avatar")) {
+        		try {
+        			String href = "/users/" + i;
+                	myWaitVar.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[@href='" + href + "']")));
+                	System.out.println("Enabled " + images.get(i).isEnabled());
+                	System.out.println("Displayed " + images.get(i).isDisplayed());
+                	System.out.println("Selected " + images.get(i).isSelected());
+                	System.out.println("Profile " + i + " visible");
+                } catch (Exception e) {
+                	System.out.println(e.getMessage() + " Profile " + i + " not visible");
+                }
+        	} else {
+        		System.out.println(i + " Not what we are looking for, " +  images.get(i).getAttribute("alt"));
+        	}
+        }
+        driver.quit();
     }
     
     public void switchTab(WebDriver driver) {
