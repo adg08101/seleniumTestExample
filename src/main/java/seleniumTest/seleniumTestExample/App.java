@@ -11,8 +11,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import io.cucumber.gherkin.ParserException.UnexpectedTokenException;
-
 public class App 
 {
     public static void main( String[] args )
